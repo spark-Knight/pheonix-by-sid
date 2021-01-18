@@ -95,7 +95,7 @@ def sendEmail(to, content):
     server.starttls()
      
     # Enable low security in gmail
-    server.login('dna8377850@gmail.com', 'your email passowrd')
+    server.login('dna8377850@gmail.com', '')
     server.sendmail('dna8377850@gmail.com', to, content)
     server.close()
 
@@ -148,32 +148,57 @@ if __name__ == '__main__':
             strTime = datetime.datetime.now().strftime("% H:% M:% S")    
             speak(f"Sir, the time is {strTime}")
  
-        elif 'open opera' in query:
-            codePath = r"C:\\Users\\GAURAV\\AppData\\Local\\Programs\\Opera\\launcher.exe"
-            os.startfile(codePath)
- 
+        # elif 'open opera' in query:
+        #     codePath = r"C:\\Users\\GAURAV\\AppData\\Local\\Programs\\Opera\\launcher.exe"
+        #     os.startfile(codePath)
+
+        
+        elif 'email to me' in query:
+             try:
+                speak("What should I say?")
+                content = takeCommand()
+                to = "dna8377850@gmail.com"   
+                sendEmail(to, content)
+                speak("Email has been sent !")
+            except Exception as e:
+                print(e)
+                speak("I am not able to send this email")
+
+
         elif 'email to Hanish Arora' in query:
             try:
                 speak("What should I say?")
                 content = takeCommand()
-                to = "Receiver email address"   
+                to = "hanish.arora8@gmail.com"   
                 sendEmail(to, content)
                 speak("Email has been sent !")
             except Exception as e:
                 print(e)
                 speak("I am not able to send this email")
  
-        elif 'send a mail' in query:
+        elif 'send a email to nargis' in query:
             try:
                 speak("What should I say?")
                 content = takeCommand()
                 speak("whome should i send")
-                to = input()    
+                to = "nannikhan72@gmail.com"   
                 sendEmail(to, content)
                 speak("Email has been sent !")
             except Exception as e:
                 print(e)
                 speak("I am not able to send this email")
+
+        elif 'send a email to dinesh' in query:
+            try:
+                speak("What should I say?")
+                content = takeCommand()
+                speak("whome should i send")
+                to = "dkumar42358@gmail.com"   
+                sendEmail(to, content)
+                speak("Email has been sent !")
+            except Exception as e:
+                print(e)
+                speak("I am not able to send this email")        
  
         elif 'how are you' in query:
             speak("I am fine, Thank you")
