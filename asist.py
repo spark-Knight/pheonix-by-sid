@@ -16,8 +16,11 @@ import pyjokes
 import smtplib 
 import ctypes
 import time
-import requests
+import requests 
+from requests import get
+import pyautogui
 import shutil
+import pywhatkit as kit
 # from twilio.rest import Client
 # from clint.textui import progress
 # from ecapture import ecapture as ec
@@ -30,6 +33,18 @@ engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
 
+f=open("settings.txt","r")
+lines=f.readlines()
+password=lines[0]
+f.close()
+
+Email={'hanish':'hanish.arora8@gmail.com','dinesh':'dkumar42358@gmail.com','sid':'dna8377850@gmail.com','nargis':'nannikhan72@gmail.com'}
+
+def checker(key):
+    if key in Email:
+        return Email[key]
+    else:
+        return "no user found sorry"
 
 # chrome_path = 'C:/Program Files/Google/Chrome/Application/chrome.exe %s'
 # webbrowser.get(chrome_path)
@@ -41,34 +56,34 @@ def speak(audio):
     engine.runAndWait()
  
 
+
 def wishMe():
     hour = int(datetime.datetime.now().hour)
+    pt = time.strftime("%H:%M:%S")
+
     if hour>= 0 and hour<12:
-        speak("Good Morning Sir !")
-  
+        speak(f'Good Morning!,its {pt}')
+        print(f'Good Morning!,its {pt}')
     elif hour>= 12 and hour<18:
-        speak("Good Afternoon Sir !")   
-  
+        speak(f"Good Afternoon!,its {pt}")
+        print(f"Good Afternoon!,its {pt}")    
     else:
-        speak("Good Evening Sir !")  
-  
-    assname =("Jarvis 1 point o")
-    speak("I am your Assistant")
-    speak(assname)
+        speak(f"Good Evening!,its {pt}") 
+        print(f"Good Evening!,its {pt}")  
+        speak(f"i am jarvis. i am your assistant. Please tell me how may i help you")
 
 
 def usrname():
-    speak("What should i call you sir")
+    speak("What should i call you")
     uname = takeCommand()
-    a = (speak("Welcome " + uname))
-    speak(a)
+    speak("Welcome " + uname)
     columns = shutil.get_terminal_size().columns
      
     print("#####################".center(columns))
-    print("Welcome sir!" , uname.center(columns))
+    print("Welcome!" , uname.center(columns))
     print("#####################".center(columns))
      
-    speak("How can i Help you, Sir")
+    speak("How can i Help you")
 
 
 def takeCommand():
@@ -93,6 +108,19 @@ def takeCommand():
      
     return query
 
+def news():
+    main_url = "https://newsapi.org/v2/top-headlines?sources=techcrunch&apikey=dd99e5301ef942e0a2748194efc4ad40"
+
+    main_page = requests.get(main_url).json()
+    articles = main_page["articles"]
+    head=[]
+    day=["first","second","third","fourth","fifth","sixth","seventh","eighth","ninth","tenth"]
+    for ar in articles:
+        head.append(ar["title"])
+    for i in range(len(day)):
+        speak(f"today's {day[i]} news is: {head[i]}")  
+        print(f"today's {day[i]} news is: {head[i]}") 
+
 
 def sendEmail(to, content):
     server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -100,7 +128,7 @@ def sendEmail(to, content):
     server.starttls()
      
     # Enable low security in gmail
-    server.login('siddhu4718k@gmail.com', 'matkewala')
+    server.login('siddhu4718k@gmail.com', password)
     server.sendmail('siddhu4718k@gmail.com', to, content)
     server.close()
 
@@ -121,6 +149,7 @@ if __name__ == '__main__':
         # stored here in 'query' and will be
         # converted to lower case for easily 
         # recognition of command
+
         if 'wikipedia' in query:
             speak('Searching Wikipedia...')
             query = query.replace("wikipedia", "")
@@ -128,29 +157,47 @@ if __name__ == '__main__':
             speak("According to Wikipedia")
             print(results)
             speak(results)
+
+        # elif "wake up" in query:
+        #       speak("tank's sir ")
  
         elif 'open youtube' in query:
             speak("Here you go to Youtube\n")
             webbrowser.open("youtube.com")
+        
+        elif 'search in google' in query:
+            speak("sir, what should i search in google")
+            cm = takeCommand().lower()
+            webbrowser.open(f"{cm}")
+
+            
+
+                 
  
         elif 'open google' in query:
             speak("Here you go to Google\n")
             webbrowser.open("google.com")
+
+        elif "ip address" in query:
+            ip = get("https://api.ipify.org").text
+            speak(f"your ip address is {ip}")
+
  
         elif 'open stackoverflow' in query:
             speak("Here you go to Stack Over flow.Happy coding")
             webbrowser.open("stackoverflow.com")   
  
-        elif 'play music' in query or "play song" in query:
+        elif 'play music' in query:
             speak("Here you go with music")
             # music_dir = "G:\\Song"
             music_dir = "C:\\Users\\91971\\OneDrive\\Desktop\\your dad\\songs"
             songs = os.listdir(music_dir)
-            print(songs)    
+            print(songs)
+            rd = random.choice(songs)    
             random = os.startfile(os.path.join(music_dir, songs[0]))
  
-        elif 'what is the time' in query:
-            strTime = datetime.datetime.now().strftime("%H:%M:%S:%")    
+        elif 'time' in query:
+            strTime = datetime.datetime.now().strftime(" %H:%M:%S")    
             speak(f"Sir, the time is {strTime}")
  
         # elif 'open opera' in query:
@@ -158,91 +205,21 @@ if __name__ == '__main__':
         #     os.startfile(codePath)
 
 
-        elif 'email to Pooja di' in query:
+
+        elif 'send email' in query:
             try:
+                speak("whom should i send mail to")
+                to = checker(takeCommand().lower())
                 speak("What should I say?")
                 content = takeCommand()
-                to = "poojanagar76@gmail.com"   
                 sendEmail(to, content)
                 speak("Email has been sent !")
+                print("Email has been sent !")
             except Exception as e:
                 print(e)
                 speak("I am not able to send this email")
 
-
-        elif 'email to vishal' in query:
-            try:
-                speak("What should I say?")
-                content = takeCommand()
-                to = "vishalkumarkm3@gmail.com"   
-                sendEmail(to, content)
-                speak("Email has been sent !")
-            except Exception as e:
-                print(e)
-                speak("I am not able to send this email")
-
-
-
-
-        elif 'email to nargis' in query:
-            try:
-                speak("What should I say?")
-                content = takeCommand()
-                to = "nannikhan72@gmail.com"   
-                sendEmail(to, content)
-                speak("Email has been sent !")
-            except Exception as e:
-                print(e)
-                speak("I am not able to send this email")
-
-
-
-
-        elif 'email to khushi' in query or 'email to shabu' in query or 'email to shabiya' in query:
-            try:
-                speak("What should I say?")
-                content = takeCommand()
-                to = "kshabiya397@gmail.com"   
-                sendEmail(to, content)
-                speak("Email has been sent !")
-            except Exception as e:
-                print(e)
-                speak("I am not able to send this email")
-
-        elif 'email to abhishek' in query or 'mail to abhi' in query or 'mail to Abhishek batliwala'in query:
-            try:
-                speak("What should I say?")
-                content = takeCommand()
-                to = "abhi3pahadi@gmail.com"   
-                sendEmail(to, content)
-                speak("Email has been sent !")
-            except Exception as e:
-                print(e)
-                speak("I am not able to send this email")
-
- 
-        elif 'email to me' in query:
-            try:
-                speak("What should I say?")
-                content = takeCommand()
-                to = "dna8377850@gmail.com"   
-                sendEmail(to, content)
-                speak("Email has been sent !")
-            except Exception as e:
-                print(e)
-                speak("I am not able to send this email")
- 
-        elif ' mail to hanish' in query or 'mail to my bhaiya' in query or 'mail to hanish bhaiya'in query:
-            try:
-                speak("What should I say?")
-                content = takeCommand()
-                speak("whome should i send")
-                to = "hanish.arora8@gmail.com" 
-                sendEmail(to, content)
-                speak("Email has been sent !")
-            except Exception as e:
-                print(e)
-                speak("I am not able to send this email")
+    
  
         elif 'how are you' in query:
             speak("I am fine, Thank you")
@@ -266,7 +243,7 @@ if __name__ == '__main__':
             print("My friends call me", assname)
  
         elif 'exit' in query:
-            speak("Thanks for giving me your time")
+            speak("Thanks for using me sir, have a good day.")
             exit()
  
         elif "who made you" in query or "who created you" in query: 
@@ -330,33 +307,17 @@ if __name__ == '__main__':
         #     os.startfile(appli)
  
         elif 'news' in query:
-             
-            try: 
-                jsonObj = urlopen('''https://newsapi.org / v1 / articles?source = the-times-of-india&sortBy = top&apiKey =\\times of India Api key\\''')
-                data = json.load(jsonObj)
-                i = 1
-                 
-                speak('here are some top news from the times of india')
-                print('''=============== TIMES OF INDIA ============'''+ '\n')
-                 
-                for item in data['articles']:
-                     
-                    print(str(i) + '. ' + item['title'] + '\n')
-                    print(item['description'] + '\n')
-                    speak(str(i) + '. ' + item['title'] + '\n')
-                    i += 1
-            except Exception as e:
-                 
-                print(str(e))
- 
+            speak("today news are")
+            news()
          
         elif 'lock window' in query:
                 speak("locking the device")
                 ctypes.windll.user32.LockWorkStation()
  
-        elif 'shutdown system' in query or 'computer band karo' in query:
-                speak("Hold On a Sec ! Your system is on its way to shut down")
-                subprocess.call('shutdown / s /t 1')
+        elif 'shutdown system' in query or 'computer band karo' in query or """this time to leave """in query:
+            speak("thank's sir ,for giving me your time.")
+            # speak("Hold On a Sec ! Your system is on its way to shut down")
+            os.system('shutdown /s /t 1')
                  
         elif 'empty recycle bin' in query:
             winshell.recycle_bin().empty(confirm = False, show_progress = False, sound = True)
@@ -434,45 +395,14 @@ if __name__ == '__main__':
 
 
         elif "temperature" in query:
-            speak("what is your place name")
-            search = takeCommand()
+            take_plce_name = takeCommand()
+            search = take_plce_name
             url = f"https://www.google.com/search?q={search}"
             r = requests.get(url)
             data =BeautifulSoup(r.text,"html.parser")
             temp = data.find("div",class_="BNeawe").text
             speak(f"current {search} is {temp}")
  
-        # elif "weather" in query:
-             
-        #     # Google Open weather website
-        #     # to get API of Open weather 
-        #     api_key = "1d7f1ae8b2ae196a73c75e89c798e54f"
-        #     base_url = "http://api.openweathermap.org/data/2.5/weather?"
-        #     speak(" City name ")
-        #     print("City name : ")
-        #     city_name = takeCommand()
-        #     complete_url = base_url + "appid =" + api_key + "&q =" + city_name
-        #     response = requests.get(complete_url) 
-        #     x = response.json() 
-             
-        #     if x["cod"] != "404": 
-        #         y = x["main"] 
-        #         current_temperature = y["temp"] 
-        #         current_pressure = y["pressure"] 
-        #         current_humidiy = y["humidity"] 
-        #         z = x["weather"] 
-        #         weather_description = z[0]["description"] 
-        #         print(" Temperature (in kelvin unit) = " +
-        #                         str(current_temperature) +
-        #             "\n atmospheric pressure (in hPa unit) = " +
-        #                         str(current_pressure) +
-        #             "\n humidity (in percentage) = " +
-        #                         str(current_humidiy) +
-        #             "\n description = " +
-        #                         str(weather_description)) 
-             
-        #     else: 
-        #         speak(" City Not Found ")
              
         # elif "send message " in query:
         #         # You need to create an account on Twilio to use this service
@@ -519,4 +449,34 @@ if __name__ == '__main__':
                 speak (next(res.results).text)
             except StopIteration:
                 print ("No results")
- 
+
+        elif "youtube" in query or "let's enjoy on youtube " in query :
+            speak("i also thinks that ,you are very tired, So let's do little bit enjoy sir...")
+            speak("So, what video you want to play!")
+            kit.playonyt(takeCommand()) 
+
+
+        elif "wher i am " in query or "where we are" in query:
+            speak("wait sir, let me check")
+            try:
+                ipAdd = requests.get("https:/api.ipify.org").text
+                print(ipAdd)
+                url = "https://get.geojs.io/v1/ip/geo/"+ ipAdd +".json"
+                geo_requests = requests.get(url)
+                geo_data = geo_requests.json()
+                state = geo_data["state"]
+                # city = geo_data["city"]
+                country =geo_data["country"]
+                speak(f"sir i not sure, but i think we are in {state} city of {country} country ")
+            except Exception as e:
+                speak("sorry sir, due to network issue i am not able to findwhere we are.")
+                pass   
+
+        elif "take screenshot" in query or "take a screenshot" in query:
+            speak("sir, please tell me the name for this screenshot file")
+            name = takeCommand().lower()
+            speak("please sir hold the screen for few seconds, i am taking screenshot")
+            time.sleep(1.5)
+            img = pyautogui.screenshot()
+            img.save(f"{name}.png")
+            speak("i have done sir, the screenshot is saved in our main folder. Now i ready for next command")    
