@@ -3,12 +3,14 @@ import wolframalpha
 import pyttsx3
 # import tkinter 
 import json
+import ecapture 
 import random
 import operator
 import speech_recognition as sr
 import datetime
 import wikipedia
 import webbrowser
+from webbrowser import Chrome
 import os
 import winshell
 import pyjokes
@@ -19,8 +21,11 @@ import time
 import requests 
 from requests import get
 import pyautogui
+import selenium
 import shutil
 import pywhatkit as kit
+import cv2
+from ecapture import ecapture as ec
 # from twilio.rest import Client
 # from clint.textui import progress
 # from ecapture import ecapture as ec
@@ -32,6 +37,7 @@ from urllib.request import urlopen
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
+engine.setProperty("rate",200)
 
 f=open("settings.txt","r")
 lines=f.readlines()
@@ -114,7 +120,7 @@ def news():
     main_page = requests.get(main_url).json()
     articles = main_page["articles"]
     head=[]
-    day=["first","second","third","fourth","fifth","sixth","seventh","eighth","ninth","tenth"]
+    day=["first","second","third"]
     for ar in articles:
         head.append(ar["title"])
     for i in range(len(day)):
@@ -163,20 +169,17 @@ if __name__ == '__main__':
  
         elif 'open youtube' in query:
             speak("Here you go to Youtube\n")
-            webbrowser.open("youtube.com")
+            webbrowser.Chrome.open("youtube.com")
         
         elif 'search in google' in query:
             speak("sir, what should i search in google")
             cm = takeCommand().lower()
-            webbrowser.open(f"{cm}")
-
-            
-
-                 
+            webbrowser.Chrome.open(f"{cm}")
+          
  
         elif 'open google' in query:
             speak("Here you go to Google\n")
-            webbrowser.open("google.com")
+            webbrowser.Chrome.open(0,"tab")
 
         elif "ip address" in query:
             ip = get("https://api.ipify.org").text
@@ -185,7 +188,7 @@ if __name__ == '__main__':
  
         elif 'open stackoverflow' in query:
             speak("Here you go to Stack Over flow.Happy coding")
-            webbrowser.open("stackoverflow.com")   
+            webbrowser.Chrome.open("stackoverflow.com")   
  
         elif 'play music' in query:
             speak("Here you go with music")
@@ -195,7 +198,18 @@ if __name__ == '__main__':
             print(songs)
             rd = random.choice(songs)    
             random = os.startfile(os.path.join(music_dir, songs[0]))
+
  
+        elif "volume up" in query:
+            pyautogui.press("volumeup")
+
+        elif "volume down" in query:
+            pyautogui.press("volumedown")
+
+        elif "volume mute" in query:
+            pyautogui.press("volumemute")        
+
+
         elif 'time' in query:
             strTime = datetime.datetime.now().strftime(" %H:%M:%S")    
             speak(f"Sir, the time is {strTime}")
@@ -208,7 +222,7 @@ if __name__ == '__main__':
 
         elif 'send email' in query:
             try:
-                speak("whom should i send mail to")
+                speak("whom should i send mail to")                                                                                                                                                                                    
                 to = checker(takeCommand().lower())
                 speak("What should I say?")
                 content = takeCommand()
@@ -314,7 +328,7 @@ if __name__ == '__main__':
                 speak("locking the device")
                 ctypes.windll.user32.LockWorkStation()
  
-        elif 'shutdown system' in query or 'computer band karo' in query or """this time to leave """in query:
+        elif 'shutdown system' in query or 'computer band karo' in query or """it%s time to leave """in query:
             speak("thank's sir ,for giving me your time.")
             # speak("Hold On a Sec ! Your system is on its way to shut down")
             os.system('shutdown /s /t 1')
@@ -420,7 +434,7 @@ if __name__ == '__main__':
         #         print(message.sid)
  
         elif "wikipedia" in query:
-            webbrowser.open("wikipedia.com")
+            webbrowser.Chrome.open("wikipedia.com")
  
         elif "Good Morning" in query:
             speak("A warm" +query)
@@ -450,13 +464,13 @@ if __name__ == '__main__':
             except StopIteration:
                 print ("No results")
 
-        elif "youtube" in query or "let's enjoy on youtube " in query :
+        elif "youtube" in query or "let's enjoy on youtube " in query or "it%s entertain timing" in query :
             speak("i also thinks that ,you are very tired, So let's do little bit enjoy sir...")
             speak("So, what video you want to play!")
             kit.playonyt(takeCommand()) 
 
 
-        elif "wher i am " in query or "where we are" in query:
+        elif "where i am " in query or "where we are" in query:
             speak("wait sir, let me check")
             try:
                 ipAdd = requests.get("https:/api.ipify.org").text
@@ -480,3 +494,17 @@ if __name__ == '__main__':
             img = pyautogui.screenshot()
             img.save(f"{name}.png")
             speak("i have done sir, the screenshot is saved in our main folder. Now i ready for next command")    
+        
+
+        elif "alarm" in query:
+            speak("set please tell me the time to set the alarm")
+            tt = takeCommand()
+            tt = tt.replace("set alarm to ","")
+            tt = tt.replace(".","")
+            tt = tt.upper()
+            import MyAlarm
+            MyAlarm.alarm(tt)
+
+
+
+        
