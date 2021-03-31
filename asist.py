@@ -24,6 +24,7 @@ import pyautogui
 import selenium
 import shutil
 import pywhatkit as kit
+import keyboard
 import cv2
 from ecapture import ecapture as ec
 # from twilio.rest import Client
@@ -36,7 +37,7 @@ from urllib.request import urlopen
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[1].id)
+engine.setProperty('voice', voices[0].id)
 engine.setProperty("rate",200)
 
 f=open("settings.txt","r")
@@ -52,8 +53,11 @@ def checker(key):
     else:
         return "no user found sorry"
 
-# chrome_path = 'C:/Program Files/Google/Chrome/Application/chrome.exe %s'
-# webbrowser.get(chrome_path)
+url = 'https://www.google.com'
+webbrowser.register('chrome',
+	None,
+	webbrowser.BackgroundBrowser("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"))
+# webbrowser.get('chrome').open(url)
 
 
 
@@ -128,6 +132,15 @@ def news():
         print(f"today's {day[i]} news is: {head[i]}") 
 
 
+def Music():
+    speak("Tell me the name of song!")
+    musicName = takeCommand() 
+    kit.playonyt(musicName)
+
+     
+
+
+
 def sendEmail(to, content):
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
@@ -174,12 +187,37 @@ if __name__ == '__main__':
         elif 'search in google' in query:
             speak("sir, what should i search in google")
             cm = takeCommand().lower()
-            webbrowser.Chrome.open(f"{cm}")
-          
+            webbrowser.open(f"{cm}")
+
+        elif "open chrome" in query:
+            os.startfile("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe")
+        
+        elif "home page" in query:
+            keyboard.press("Alt + Home")
+        elif "page up" in query:
+            keyboard.press("ctrl + Page Down")
+        elif "page down" in query:
+            keyboard.press("ctrl + page up")
+        elif "open incognito" in query:
+            keyboard.press("alt + ctrl + n")
+        elif "downlaod" in query:
+            keyboard.press("ctrl + j")
+        elif "open history" in query:
+            keyboard.press("ctrl + h")
+        elif "forward a page" in query:
+            keyboard.press("alt + right arrow") 
+        elif "new tab " in query :
+            keyboard.press("ctrl + t")    
+        elif "close tab" in query :
+            keyboard.press("ctrl + w")           
+
+
+        elif "close chrome" in query:
+            os.system("TASKKILL /F /im chrome.exe ")  
  
         elif 'open google' in query:
             speak("Here you go to Google\n")
-            webbrowser.Chrome.open(0,"tab")
+            webbrowser.get('chrome').open(url)
 
         elif "ip address" in query:
             ip = get("https://api.ipify.org").text
@@ -188,9 +226,9 @@ if __name__ == '__main__':
  
         elif 'open stackoverflow' in query:
             speak("Here you go to Stack Over flow.Happy coding")
-            webbrowser.Chrome.open("stackoverflow.com")   
+            webbrowser.get("chrome").open("https://www.stackoverflow.com")   
  
-        elif 'play music' in query:
+        elif 'play music from my file' in query:
             speak("Here you go with music")
             # music_dir = "G:\\Song"
             music_dir = "C:\\Users\\91971\\OneDrive\\Desktop\\your dad\\songs"
@@ -199,15 +237,16 @@ if __name__ == '__main__':
             rd = random.choice(songs)    
             random = os.startfile(os.path.join(music_dir, songs[0]))
 
+        elif "play music from youtube" in query:
+            Music()   
+
  
         elif "volume up" in query:
             pyautogui.press("volumeup")
-
         elif "volume down" in query:
             pyautogui.press("volumedown")
-
         elif "volume mute" in query:
-            pyautogui.press("volumemute")        
+            pyautogui.press("volumemute")           
 
 
         elif 'time' in query:
@@ -237,7 +276,7 @@ if __name__ == '__main__':
  
         elif 'how are you' in query:
             speak("I am fine, Thank you")
-            speak("How are you, Sir")
+            speak("what's about you, Sir")
  
         elif 'fine' in query or "good" in query:
             speak("It's good to know that your fine")
@@ -345,7 +384,7 @@ if __name__ == '__main__':
  
         # elif "where is" in query:
         #     query = query.replace("where is", "")
-        #     location = query
+        #     location = queryś
         #     speak("User asked to Locate")
         #     speak(location)
         #     webbrowser.open("https://www.google.nl / maps / place/" + location + "")
@@ -437,7 +476,7 @@ if __name__ == '__main__':
             webbrowser.Chrome.open("wikipedia.com")
  
         elif "Good Morning" in query:
-            speak("A warm" +query)
+            speak("A warm" + query)
             speak("How are you Mister")
             speak(assname)
  
@@ -469,6 +508,42 @@ if __name__ == '__main__':
             speak("So, what video you want to play!")
             kit.playonyt(takeCommand()) 
 
+        elif "close youtube" in query:
+            speak()
+            os.sysytem("TASKKILL /F /im chrome.exe ")
+
+        elif "pause" in query:
+            keyboard.press("space bar")
+        elif "play again" in query:
+            speak("sure, Sir!")
+            keyboard.press("0")
+        elif "mute video" in query:
+            keyboard.press("m")
+        elif "unmunte" in query:
+            keyboard.press("m")    
+        elif "next " in query:
+            keyboard.press("shift + n") 
+        elif "previous video" in query:
+            keyboard.press("shift + p")    
+        elif "skip" in query:
+            keyboard.press("l")
+        elif "back" in query:
+            keyboard.press("j")   
+        elif "full screen" in query:
+            keyboard.press("f")   
+        elif "theatre mode" in query:
+            keyboard.press("t")    
+        elif "miniplayer" in query:
+            keyboard.press("i") 
+
+
+
+
+
+                
+
+
+
 
         elif "where i am " in query or "where we are" in query:
             speak("wait sir, let me check")
@@ -496,14 +571,14 @@ if __name__ == '__main__':
             speak("i have done sir, the screenshot is saved in our main folder. Now i ready for next command")    
         
 
-        elif "alarm" in query:
-            speak("set please tell me the time to set the alarm")
-            tt = takeCommand()
-            tt = tt.replace("set alarm to ","")
-            tt = tt.replace(".","")
-            tt = tt.upper()
-            import MyAlarm
-            MyAlarm.alarm(tt)
+        # elif "alarm" in query:
+        #     speak("set please tell me the time to set the alarm")
+        #     tt = takeCommand()
+        #     tt = tt.replace("set alarm to ","")
+        #     tt = tt.replace(".","")
+        #     tt = tt.upper()
+        #     import MyAlarm
+        #     MyAlarm.alarm(tt)
 
 
 
