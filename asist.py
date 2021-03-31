@@ -26,7 +26,11 @@ import shutil
 import pywhatkit as kit
 import keyboard
 import cv2
+import phonenumbers
 from ecapture import ecapture as ec
+from phone import a
+from phonenumbers import carrier
+from phonenumbers import geocoder
 # from twilio.rest import Client
 # from clint.textui import progress
 # from ecapture import ecapture as ec
@@ -46,6 +50,8 @@ password=lines[0]
 f.close()
 
 Email={'hanish':'hanish.arora8@gmail.com','dinesh':'dkumar42358@gmail.com','sid':'dna8377850@gmail.com','nargis':'nannikhan72@gmail.com'}
+
+
 
 def checker(key):
     if key in Email:
@@ -169,7 +175,18 @@ if __name__ == '__main__':
         # converted to lower case for easily 
         # recognition of command
 
-        if 'wikipedia' in query:
+        if "trace my number" in query:
+            speak("tell me your phone number")
+            phone_number = input(int())
+            ch_number = phonenumbers.parse(phone_number, "CH")
+            speak("you exist in: " + (geocoder.description_for_number(ch_number, "en")))
+            print(geocoder.description_for_number(ch_number, "en"))
+            service_number = phonenumbers.parse(phone_number, "RO")
+            speak("your sim name is: " + (carrier.name_for_number(service_number, "en")))
+            print(carrier.name_for_number(service_number, "en"))
+
+
+        elif 'wikipedia' in query:
             speak('Searching Wikipedia...')
             query = query.replace("wikipedia", "")
             results = wikipedia.summary(query, sentences = 3)
