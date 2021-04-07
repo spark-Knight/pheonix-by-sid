@@ -49,6 +49,7 @@ lines=f.readlines()
 password=lines[0]
 f.close()
 
+
 Email={'hanish':'hanish.arora8@gmail.com','dinesh':'dkumar42358@gmail.com','sid':'dna8377850@gmail.com','nargis':'nannikhan72@gmail.com'}
 
 
@@ -71,8 +72,6 @@ def speak(audio):
     engine.say(audio)
     engine.runAndWait()
  
-
-
 def wishMe():
     hour = int(datetime.datetime.now().hour)
     pt = time.strftime("%H:%M:%S")
@@ -88,7 +87,6 @@ def wishMe():
         print(f"Good Evening!,its {pt}")  
         speak(f"i am jarvis. i am your assistant. Please tell me how may i help you")
 
-
 def usrname():
     speak("What should i call you")
     uname = takeCommand()
@@ -100,7 +98,6 @@ def usrname():
     print("#####################".center(columns))
      
     speak("How can i Help you")
-
 
 def takeCommand():
      
@@ -137,11 +134,33 @@ def news():
         speak(f"today's {day[i]} news is: {head[i]}")  
         print(f"today's {day[i]} news is: {head[i]}") 
 
-
 def Music():
     speak("Tell me the name of song!")
     musicName = takeCommand() 
     kit.playonyt(musicName)
+
+def closeApp():
+    speak ("i have closed all programs!")  
+
+    if "youtube" in query:
+        os.system("TASKKILL /F /im chrome.exe ")
+
+    elif "chrome" in query:
+        os.system("TASKILL /F /im chrome.exe")
+
+    elif "code" in query:
+        os.system("TASKILL /F /im code.exe")
+
+    elif "file explorer" in query:
+        os.system("TASKILL /F / explorer.exe") 
+
+    elif "cmd" in query:
+        os.system("TASKILL /F /im cmd.exe") 
+
+
+
+
+
 
      
 
@@ -195,38 +214,38 @@ if __name__ == '__main__':
             speak(results)
 
         # elif "wake up" in query:
-        #       speak("tank's sir ")
+        #       speak("tank's sir ")FF 
  
-        elif 'open youtube' in query:
-            speak("Here you go to Youtube\n")
-            webbrowser.Chrome.open("youtube.com")
+        # elif 'open youtube' in query:
+        #     speak("Here you go to Youtube\n")
+        #     webbrowser.Chrome.open("youtube.com")
         
         elif 'search in google' in query:
             speak("sir, what should i search in google")
             cm = takeCommand().lower()
-            webbrowser.open(f"{cm}")
+            webbrowser.get("Chrome").open(f"{cm}")
 
         elif "open chrome" in query:
             os.startfile("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe")
         
-        elif "home page" in query:
-            keyboard.press("Alt + Home")
-        elif "page up" in query:
-            keyboard.press("ctrl + Page Down")
-        elif "page down" in query:
-            keyboard.press("ctrl + page up")
-        elif "open incognito" in query:
-            keyboard.press("alt + ctrl + n")
-        elif "downlaod" in query:
-            keyboard.press("ctrl + j")
-        elif "open history" in query:
-            keyboard.press("ctrl + h")
-        elif "forward a page" in query:
-            keyboard.press("alt + right arrow") 
-        elif "new tab " in query :
-            keyboard.press("ctrl + t")    
-        elif "close tab" in query :
-            keyboard.press("ctrl + w")           
+        # elif "home page" in query:
+        #     keyboard.press("Alt + Home")
+        # elif "page up" in query:
+        #     keyboard.press("ctrl + Page Down")
+        # elif "page down" in query:
+        #     keyboard.press("ctrl + page up")
+        # elif "open incognito" in query:
+        #     keyboard.press("alt + ctrl + n")
+        # elif "downlaod" in query:
+        #     keyboard.press("ctrl + j")
+        # elif "open history" in query:
+        #     keyboard.press("ctrl + h")
+        # elif "forward a page" in query:
+        #     keyboard.press("alt + right arrow") 
+        # elif "new tab " in query :
+        #     keyboard.press("ctrl + t")    
+        # elif "close tab" in query :
+        #     keyboard.press("ctrl + w")           
 
 
         elif "close chrome" in query:
@@ -269,7 +288,7 @@ if __name__ == '__main__':
         elif 'time' in query:
             strTime = datetime.datetime.now().strftime(" %H:%M:%S")    
             speak(f"Sir, the time is {strTime}")
- 
+            print(f"Sir, the time is {strTime}")
         # elif 'open opera' in query:
         #     codePath = r"C:\\Users\\GAURAV\\AppData\\Local\\Programs\\Opera\\launcher.exe"
         #     os.startfile(codePath)
@@ -321,17 +340,25 @@ if __name__ == '__main__':
              
         elif 'joke' in query:
             speak(pyjokes.get_joke())
+            print(pyjokes.get_joke())
              
-        elif "calculate" in query: 
+        elif "calculate" in query:
+            try:
+                app_id = "R9V425-GXQQLELXJH"
+                client = wolframalpha.Client(app_id)
+                indx = query.lower().split().index('calculate') 
+                query = query.split()[indx + 1:] 
+                res = client.query(' '.join(query)) 
+                answer = next(res.results).text
+                print("The answer is " + answer) 
+                speak("The answer is " + answer) 
+            except Exception as e:
+                speak("sorry sir i can't understand you, what you said")
+                pass   
+                 
              
-            app_id = "R9V425-GXQQLELXJH"
-            client = wolframalpha.Client(app_id)
-            indx = query.lower().split().index('calculate') 
-            query = query.split()[indx + 1:] 
-            res = client.query(' '.join(query)) 
-            answer = next(res.results).text
-            print("The answer is " + answer) 
-            speak("The answer is " + answer) 
+           
+           
  
         # elif 'search' in query or 'play' in query:
              
@@ -353,7 +380,7 @@ if __name__ == '__main__':
  
         # elif 'power point presentation' in query:
         #     speak("opening Power Point presentation")
-        #     power = r"C:\\Users\\GAURAV\\Desktop\\Minor Project\\Presentation\\Voice Assistant.pptx"
+        #     power = r"C:\\Users\\GAURAV\\Desktop\\Minor Project\\Presentation\\Voice Assistant.pptx" ###### here you add path of powerpoint presentation.
         #     os.startfile(power)
  
         elif 'is love' in query:
@@ -384,10 +411,13 @@ if __name__ == '__main__':
                 speak("locking the device")
                 ctypes.windll.user32.LockWorkStation()
  
-        elif 'shutdown system' in query or 'computer band karo' in query or """it%s time to leave """in query:
+        elif 'shutdown system' in query or 'computer band karo' in query or "it's timing to leave "in query or "computer band kar" in query:
             speak("thank's sir ,for giving me your time.")
             # speak("Hold On a Sec ! Your system is on its way to shut down")
+            closeApp()
+            speak("one minute sir!. let me close all background apps.")
             os.system('shutdown /s /t 1')
+            
                  
         elif 'empty recycle bin' in query:
             winshell.recycle_bin().empty(confirm = False, show_progress = False, sound = True)
@@ -464,12 +494,11 @@ if __name__ == '__main__':
 
 
 
-        elif "temperature" in query:
-            take_plce_name = takeCommand()
-            search = take_plce_name
+        elif "temperature " in query:
+            search = query.replace("temperature","")
             url = f"https://www.google.com/search?q={search}"
             r = requests.get(url)
-            data =BeautifulSoup(r.text,"html.parser")
+            data = BeautifulSoup(r.text,"html.parser")
             temp = data.find("div",class_="BNeawe").text
             speak(f"current {search} is {temp}")
  
@@ -520,7 +549,7 @@ if __name__ == '__main__':
             except StopIteration:
                 print ("No results")
 
-        elif "youtube" in query or "let's enjoy on youtube " in query or "it%s entertain timing" in query :
+        elif "youtube" in query or "let's enjoy on youtube " in query or "it's entertain timing" in query :
             speak("i also thinks that ,you are very tired, So let's do little bit enjoy sir...")
             speak("So, what video you want to play!")
             kit.playonyt(takeCommand()) 
@@ -552,14 +581,6 @@ if __name__ == '__main__':
             keyboard.press("t")    
         elif "miniplayer" in query:
             keyboard.press("i") 
-
-
-
-
-
-                
-
-
 
 
         elif "where i am " in query or "where we are" in query:
