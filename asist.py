@@ -159,13 +159,6 @@ def closeApp():
 
 
 
-
-
-
-     
-
-
-
 def sendEmail(to, content):
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
@@ -228,24 +221,24 @@ if __name__ == '__main__':
         elif "open chrome" in query:
             os.startfile("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe")
         
-        # elif "home page" in query:
-        #     keyboard.press("Alt + Home")
-        # elif "page up" in query:
-        #     keyboard.press("ctrl + Page Down")
-        # elif "page down" in query:
-        #     keyboard.press("ctrl + page up")
-        # elif "open incognito" in query:
-        #     keyboard.press("alt + ctrl + n")
-        # elif "downlaod" in query:
-        #     keyboard.press("ctrl + j")
-        # elif "open history" in query:
-        #     keyboard.press("ctrl + h")
-        # elif "forward a page" in query:
-        #     keyboard.press("alt + right arrow") 
-        # elif "new tab " in query :
-        #     keyboard.press("ctrl + t")    
-        # elif "close tab" in query :
-        #     keyboard.press("ctrl + w")           
+        elif "home page" in query:
+            keyboard.press("Alt + Home")
+        elif "page up" in query:
+            keyboard.press("ctrl + Page Down")
+        elif "page down" in query:
+            keyboard.press("ctrl + page up")
+        elif "open incognito" in query:
+            keyboard.press("alt + ctrl + n")
+        elif "downlaod" in query:
+            keyboard.press("ctrl + j")
+        elif "open history" in query:
+            keyboard.press("ctrl + h")
+        elif "forward a page" in query:
+            keyboard.press("alt + right arrow") 
+        elif "new tab " in query :
+            keyboard.press("ctrl + t")    
+        elif "close tab" in query :
+            keyboard.press("ctrl + w")           
 
 
         elif "close chrome" in query:
@@ -267,7 +260,7 @@ if __name__ == '__main__':
         elif 'play music from my file' in query:
             speak("Here you go with music")
             # music_dir = "G:\\Song"
-            music_dir = "C:\\Users\\91971\\OneDrive\\Desktop\\your dad\\songs"
+            music_dir = "Your Music Folder Path"
             songs = os.listdir(music_dir)
             print(songs)
             rd = random.choice(songs)    
@@ -289,9 +282,6 @@ if __name__ == '__main__':
             strTime = datetime.datetime.now().strftime(" %H:%M:%S")    
             speak(f"Sir, the time is {strTime}")
             print(f"Sir, the time is {strTime}")
-        # elif 'open opera' in query:
-        #     codePath = r"C:\\Users\\GAURAV\\AppData\\Local\\Programs\\Opera\\launcher.exe"
-        #     os.startfile(codePath)
 
 
 
@@ -344,7 +334,7 @@ if __name__ == '__main__':
              
         elif "calculate" in query:
             try:
-                app_id = "R9V425-GXQQLELXJH"
+                app_id = "Enter Your App Id"
                 client = wolframalpha.Client(app_id)
                 indx = query.lower().split().index('calculate') 
                 query = query.split()[indx + 1:] 
@@ -358,13 +348,6 @@ if __name__ == '__main__':
                  
              
            
-           
- 
-        # elif 'search' in query or 'play' in query:
-             
-            # query = query.replace("search", "") 
-            # query = query.replace("play", "")          
-            # webbrowser.open(query) 
 
         elif 'search'  in query:
             query = query.replace("search", "")
@@ -491,32 +474,38 @@ if __name__ == '__main__':
             # wishMe()
             speak("yes sir!!!")
             # speak(assname)
+		
+	        elif "weather" in query:
+            speak("city name:")
+            print("city name:")
+            CITY = takeCommand()
+            BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
+            API_KEY = "Enter Your Api Key"
+            URL = BASE_URL + "q=" + CITY + "&appid=" + API_KEY
+            response = requests.get(URL)
+            if response.status_code == 200:
+                data = response.json()
+                main = data['main']
+                temperature = main['temp']
+                humidity = main['humidity']
+                pressure = main['pressure']
+                report = data['weather']
+                print(f"{CITY:-^30}")
+                speak(f"{CITY:-^30}")
+                print(f"Temperature: {temperature}")
+                speak(f"Temperature: {temperature}")
+                print(f"Humidity: {humidity}")
+                speak(f"Humidity: {humidity}")
+                print(f"Pressure: {pressure}")
+                speak(f"Pressure: {pressure}")
+                print(f"Weather Report: {report[0]['description']}")
+                speak(f"Weather Report: {report[0]['description']}")
+            else:
+                print("sorry sir i can't find the weather report")
+                speak("sorry sir i can't find the weather report")
+	
 
-
-
-        elif "temperature " in query:
-            search = query.replace("temperature","")
-            url = f"https://www.google.com/search?q={search}"
-            r = requests.get(url)
-            data = BeautifulSoup(r.text,"html.parser")
-            temp = data.find("div",class_="BNeawe").text
-            speak(f"current {search} is {temp}")
- 
              
-        # elif "send message " in query:
-        #         # You need to create an account on Twilio to use this service
-        #         account_sid = 'Account Sid key'
-        #         auth_token = 'Auth token'
-        #         client = Client(account_sid, auth_token)
- 
-        #         message = client.messages \
-        #                         .create(
-        #                             body = takeCommand(),
-        #                             from_='Sender No',
-        #                             to ='Receiver No'
-        #                         )
- 
-        #         print(message.sid)
  
         elif "wikipedia" in query:
             webbrowser.Chrome.open("wikipedia.com")
@@ -609,14 +598,6 @@ if __name__ == '__main__':
             speak("i have done sir, the screenshot is saved in our main folder. Now i ready for next command")    
         
 
-        # elif "alarm" in query:
-        #     speak("set please tell me the time to set the alarm")
-        #     tt = takeCommand()
-        #     tt = tt.replace("set alarm to ","")
-        #     tt = tt.replace(".","")
-        #     tt = tt.upper()
-        #     import MyAlarm
-        #     MyAlarm.alarm(tt)
 
 
 
