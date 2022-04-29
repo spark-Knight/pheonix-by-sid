@@ -22,30 +22,30 @@ Uses of Assistent:
 
 I use So, many module to programmes this:
 
-subprocess
-wolframalpha
-pyttsx3 
-json
-ecapture 
-random
-operator
-speech_recognition
-datetime
-wikipedia
-webbrowser
-os
-winshell
-pyjokes
-feedparser
-smtplib 
-ctypes
-time
-requests 
-pyautogui
-selenium
-shutil
-pywhatkit
-keyboard
-ecapture
-phonenumbers 
+subprocess,
+wolframalpha,
+pyttsx3,
+json,
+ecapture, 
+random,
+operator,
+speech_recognition,
+datetime,
+wikipedia,
+webbrowser,
+os,
+winshell,
+pyjokes,
+feedparser,
+smtplib,
+ctypes,
+time,
+requests, 
+pyautogui,
+selenium,
+shutil,
+pywhatkit,
+keyboard,
+ecapture,
+phonenumbers, 
 
